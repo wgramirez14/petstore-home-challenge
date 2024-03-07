@@ -1,0 +1,55 @@
+apply from: "gradle/plugins/serenity.gradle"
+apply from: "gradle/plugins/spotless.gradle"
+
+ext {
+
+    libs = [
+            main : [
+                    serenityRestAssured  : "net.serenity-bdd:serenity-rest-assured:${serenityVersion}",
+                    lombok               : "org.projectlombok:lombok:${lombokVersion}",
+                    javafaker            : "com.github.javafaker:javafaker:${javafakerVersion}"
+
+
+            ],
+
+            test    : [
+                    serenityCucumber     : "net.serenity-bdd:serenity-cucumber:${serenityVersion}",
+                    cucumberJUnit        : "io.cucumber:cucumber-junit-platform-engine:${cucumberJunitPlatformEngineVersion}",
+                    restAssuredSchema    : "io.rest-assured:json-schema-validator:${restAssuredVersion}",
+                    hamcrest             : "org.hamcrest:hamcrest:${hamcrestVersion}",
+                    slf4jApi             : "org.slf4j:slf4j-api:2.0.12",
+                    slf4jSimple          : "org.slf4j:slf4j-simple:2.0.12",
+                    junitPlatform        : "org.junit.platform:junit-platform-suite:${junitPlatformSuiteVersion}",
+                    junitVintage         : "org.junit.vintage:junit-vintage-engine:${junitVintageEngineVersion}"
+            ]
+    ]
+}
+
+dependencies {
+    compileOnly         libs.main.lombok
+
+    annotationProcessor libs.main.lombok
+
+    implementation      libs.main.serenityRestAssured,
+                        libs.main.lombok,
+                        libs.main.javafaker
+
+    testImplementation  libs.test.serenityCucumber,
+                        libs.test.cucumberJUnit,
+                        libs.test.restAssuredSchema,
+                        libs.test.hamcrest,
+                        libs.test.slf4jApi,
+                        libs.test.slf4jSimple,
+                        libs.test.junitPlatform,
+                        libs.test.junitVintage
+
+}
+
+test {
+    useJUnitPlatform()
+    testLogging.showStandardStreams = true
+    systemProperties System.getProperties()
+}
+
+compileJava.dependsOn 'spotlessApply'
+gradle.startParameter.continueOnFailure = true

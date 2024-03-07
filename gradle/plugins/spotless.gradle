@@ -1,0 +1,23 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("com.diffplug.spotless:spotless-plugin-gradle:${spotlessPluginGradleVersion}")
+    }
+}
+
+apply plugin: com.diffplug.gradle.spotless.SpotlessPlugin
+
+spotless {
+    java {
+        googleJavaFormat()
+        removeUnusedImports()
+        target project.fileTree(project.rootDir) {
+            include '**/*.java'
+            exclude 'build/*'
+        }
+    }
+    encoding 'UTF-8'
+}
