@@ -1,6 +1,7 @@
 package com.petstore.qa.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.petstore.qa.contracts.StoreService;
 import com.petstore.qa.dto.store.InventoryStatusListDto;
 import com.petstore.qa.dto.store.OrderDto;
 import com.petstore.qa.services.common.BaseService;
@@ -9,10 +10,11 @@ import java.text.MessageFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StoreService extends BaseService {
+public class StoreServiceImpl extends BaseService implements StoreService {
 
-  private static final Logger logger = LoggerFactory.getLogger(StoreService.class);
+  private static final Logger logger = LoggerFactory.getLogger(StoreServiceImpl.class);
 
+  @Override
   public InventoryStatusListDto getInventoryByStatus() throws JsonProcessingException {
     Response response = httpRequest.get(properties.getProperty("store.inventory"));
 
@@ -21,6 +23,7 @@ public class StoreService extends BaseService {
     return objectMapper.readValue(response.body().asString(), InventoryStatusListDto.class);
   }
 
+  @Override
   public OrderDto placeOrder(OrderDto orderDto) throws JsonProcessingException {
     Response response =
         httpRequest
@@ -31,11 +34,13 @@ public class StoreService extends BaseService {
     return objectMapper.readValue(response.body().asString(), OrderDto.class);
   }
 
+  @Override
   public void deletePurchaseOrderById(int orderId) {
 
     httpRequest.pathParam("orderId", orderId).delete(properties.getProperty("store.orderById"));
   }
 
+  @Override
   public OrderDto findPurchaseOrderById(int orderId) throws JsonProcessingException {
 
     Response response =

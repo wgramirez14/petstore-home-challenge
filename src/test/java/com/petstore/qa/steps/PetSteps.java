@@ -1,6 +1,7 @@
 package com.petstore.qa.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.petstore.qa.decorators.PetServiceConsumer;
 import com.petstore.qa.dto.pet.PetsResponseDto;
 import com.petstore.qa.enums.PetStatus;
 import com.petstore.qa.services.common.ServiceManager;
@@ -18,7 +19,7 @@ public class PetSteps {
   public ArrayList<PetsResponseDto> findAvailablePets() {
 
     try {
-      return ServiceManager.getPetService().findPetsByStatus(PetStatus.AVAILABLE.getValue());
+      return PetServiceConsumer.findPetsByStatus(PetStatus.AVAILABLE.getValue());
     } catch (JsonProcessingException e) {
       logger.warn(e.getMessage());
       return null;
@@ -39,7 +40,7 @@ public class PetSteps {
   @Step("Find pets with status {}")
   public ArrayList<PetsResponseDto> findPetsByStatus(String status) {
     try {
-      return ServiceManager.getPetService().findPetsByStatus(PetStatus.fromName(status).getValue());
+      return PetServiceConsumer.findPetsByStatus(PetStatus.fromName(status).getValue());
     } catch (JsonProcessingException e) {
       logger.warn(e.getMessage());
       return null;

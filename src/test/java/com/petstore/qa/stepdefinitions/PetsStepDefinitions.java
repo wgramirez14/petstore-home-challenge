@@ -54,7 +54,7 @@ public class PetsStepDefinitions extends BaseStepDefinitions {
   public void theUserSearchForAPetByID() {
 
     assertThat(pets, not(nullValue()));
-    petResponse = petSteps.findPetByID(pets.get(0).getId());
+    petResponse = petSteps.findPetByID(pets.getFirst().getId());
   }
 
   @When("the user search for the pets with the status {}")
@@ -102,11 +102,12 @@ public class PetsStepDefinitions extends BaseStepDefinitions {
     validateResponse(HttpStatus.SC_OK, "schemas/pet.json");
 
     assertThat(petResponse, not(nullValue()));
-    assertThat(pets.get(0).getId(), equalTo(petResponse.getId()));
-    assertThat(pets.get(0).getName(), equalTo(petResponse.getName()));
-    assertThat(pets.get(0).getCategory().getId(), equalTo(petResponse.getCategory().getId()));
-    assertThat(pets.get(0).getCategory().getName(), equalTo(petResponse.getCategory().getName()));
-    assertThat(pets.get(0).getStatus(), equalTo(petResponse.getStatus()));
+    assertThat(pets.getFirst().getId(), equalTo(petResponse.getId()));
+    assertThat(pets.getFirst().getName(), equalTo(petResponse.getName()));
+    assertThat(pets.getFirst().getCategory().getId(), equalTo(petResponse.getCategory().getId()));
+    assertThat(
+        pets.getFirst().getCategory().getName(), equalTo(petResponse.getCategory().getName()));
+    assertThat(pets.getFirst().getStatus(), equalTo(petResponse.getStatus()));
   }
 
   @Then("all pets are listed according to the status {}")
