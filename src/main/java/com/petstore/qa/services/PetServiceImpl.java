@@ -1,6 +1,7 @@
 package com.petstore.qa.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.petstore.qa.contracts.PetService;
 import com.petstore.qa.dto.pet.PetsResponseDto;
 import com.petstore.qa.services.common.BaseService;
 import io.restassured.response.Response;
@@ -9,24 +10,22 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PetService extends BaseService {
+public class PetServiceImpl extends BaseService implements PetService {
 
-  private static final Logger logger = LoggerFactory.getLogger(PetService.class);
+  private static final Logger logger = LoggerFactory.getLogger(PetServiceImpl.class);
 
-  public ArrayList<PetsResponseDto> findPetsByStatus(String status) throws JsonProcessingException {
+  @Override
+  public Response findPetsByStatus(String status) {
 
     Response response =
         httpRequest.queryParam("status", status).get(properties.getProperty("pets.petByStatus"));
 
     logger.info(MessageFormat.format("Response: {0}", response.body().asString()));
 
-    return objectMapper.readValue(
-        response.body().asString(),
-        objectMapper
-            .getTypeFactory()
-            .constructCollectionType(ArrayList.class, PetsResponseDto.class));
+    return response;
   }
 
+  @Override
   public PetsResponseDto findPetByID(int id) throws JsonProcessingException {
 
     Response response = httpRequest.pathParam("id", id).get(properties.getProperty("pets.petById"));
@@ -35,6 +34,7 @@ public class PetService extends BaseService {
     return objectMapper.readValue(response.body().asString(), PetsResponseDto.class);
   }
 
+  @Override
   public ArrayList<PetsResponseDto> findPetByTags(ArrayList<String> tags)
       throws JsonProcessingException {
 
@@ -50,6 +50,7 @@ public class PetService extends BaseService {
             .constructCollectionType(ArrayList.class, PetsResponseDto.class));
   }
 
+  @Override
   public PetsResponseDto addNewPet(PetsResponseDto newPet) throws JsonProcessingException {
 
     Response response =
@@ -60,10 +61,12 @@ public class PetService extends BaseService {
     return objectMapper.readValue(response.body().asString(), PetsResponseDto.class);
   }
 
+  @Override
   public void deletePet(int id) {
     httpRequest.pathParam("id", id).delete(properties.getProperty("pets.petById"));
   }
 
+  @Override
   public PetsResponseDto updateExistingPet(PetsResponseDto existingPet)
       throws JsonProcessingException {
     Response response =
