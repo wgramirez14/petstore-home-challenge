@@ -1,7 +1,7 @@
 package com.petstore.qa.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petstore.qa.decorators.PetServiceConsumer;
+import com.petstore.qa.consumers.PetServiceConsumer;
 import com.petstore.qa.dto.pet.PetsResponseDto;
 import com.petstore.qa.enums.PetStatus;
 import com.petstore.qa.services.common.ServiceManager;

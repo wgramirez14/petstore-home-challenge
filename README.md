@@ -14,8 +14,10 @@ src
   + main
     + java
       + com.petstore.qa
+        + consumers               Service response processors
+        + contracts               Service Interfaces
         + dto                     POJOs
-        + enums
+        + enums                   
         + services                Services as Objects
   + test
     + java 
